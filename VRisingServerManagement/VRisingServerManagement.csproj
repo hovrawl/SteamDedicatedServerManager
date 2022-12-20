@@ -7,4 +7,15 @@
         <ApplicationIcon>wwwroot\favicon.ico</ApplicationIcon>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="8.2.0" />
+      <PackageReference Include="Serilog" Version="2.12.0" />
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+      <PackageReference Include="SteamCMD.ConPTY" Version="1.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Classes" />
+    </ItemGroup>
+
 </Project>

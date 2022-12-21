@@ -110,11 +110,13 @@ public class HomeController : Controller
         {
             Log.Information(data);
             _downloadConsoleMessageBuilder.Append(data);
+            _consoleService.SendMessage(data, false);
         };
         steamCMDConPTY.OutputDataReceived += (sender, data) =>
         {
             Log.Information(data);
             _downloadConsoleMessageBuilder.Append(data);
+            _consoleService.SendMessage(data, false);
         };
         steamCMDConPTY.Exited += (sender, exitCode) =>
         {
@@ -223,6 +225,7 @@ public class HomeController : Controller
     [HttpGet]
     public async Task DownloadConsoleMessage()
     {
+        //Response.ContentType = "text/event-stream";
         await _consoleService.SendMessage("Test Message", false);
     } 
     

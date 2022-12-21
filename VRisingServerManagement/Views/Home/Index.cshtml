@@ -14,28 +14,16 @@
 
 
 <script type="text/javascript">   
-    function downloadVRisingServer(){
-        fetch('@Url.Action("DownloadVRisingServer")', {
-            method: 'POST'
-        })
-            .then((response) => {
-                if (response.ok){
-    
-                }
-    
-            })
-            .then((data) => console.log(data))
+    VRisingServerManager = {
+        
+        
     }
-    $(document).ready(function (){
-        // on start function
-        let downloadBtn = $('.h-download-btn');
-        downloadBtn.on('click', downloadVRisingServer);
-    
+
+    function downloadVRisingServer(){
         let downloadConsole = $('.h-download-console');
-        let source = new EventSource('@Url.Action("DownloadConsoleMessage")');
-        //let source = new EventSource('/console-sse');
+        let source = new EventSource('/console-sse');
         source.onopen = function (){
-            downloadConsole.append('Connected');
+            console.log('Download Console Connected');
         }
         source.onerror = function (event){
             source.close();
@@ -45,6 +33,24 @@
                 downloadConsole.append(event.data);
             }
         }
+        VRisingServerManager.DownloadConsoleEventSource = source;
+                
+        fetch('@Url.Action("DownloadVRisingServer")', {
+            method: 'POST'
+        }).then((response) => {
+            // Disconnect the source on finish
+            if (VRisingServerManager.DownloadConsoleEventSource && VRisingServerManager.DownloadConsoleEventSource.close){
+                VRisingServerManager.DownloadConsoleEventSource.close();
+            }    
+        })
+    }
+    $(document).ready(function (){
+        // on start function
+        let downloadBtn = $('.h-download-btn');
+        downloadBtn.on('click', downloadVRisingServer);
+    
+        
+        
     });
     
 </script>

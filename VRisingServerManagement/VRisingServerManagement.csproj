@@ -9,13 +9,91 @@
 
     <ItemGroup>
       <PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="8.2.0" />
+      <PackageReference Include="RconSharp" Version="2.0.1" />
       <PackageReference Include="Serilog" Version="2.12.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
       <PackageReference Include="SteamCMD.ConPTY" Version="1.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Classes" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\boot.config" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\il2cpp_data\etc\mono\2.0\machine.config" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\il2cpp_data\etc\mono\2.0\web.config" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\il2cpp_data\etc\mono\4.0\machine.config" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\il2cpp_data\etc\mono\4.0\web.config" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\il2cpp_data\etc\mono\4.5\machine.config" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\il2cpp_data\etc\mono\4.5\web.config" />
+      <_ContentIncludedByDefault Remove="servers\save-data\Saves\v1\world1\SessionId.json" />
+      <_ContentIncludedByDefault Remove="servers\save-data\Saves\v1\world1\StartDate.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\RuntimeInitializeOnLoads.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\ScriptingAssemblies.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\DuoPvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\HardcoreDuoPvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\HardcorePvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\Level30PvE.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\Level30PvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\Level50PvE.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\Level50PvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\Level70PvE.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\Level70PvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\SoloPvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvE.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvE_Easy.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvE_Hard.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvE_Shuffle.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvP.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvP_Easy.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvP_Hard.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\GameSettingPresets\StandardPvP_Shuffle.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Arabic.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Brazilian.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Danish.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\English.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\French.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\German.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Hungarian.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Italian.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Japanese.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Koreana.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Latam.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Polish.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Russian.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\SChinese.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Spanish.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\TChinese.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Thai.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Turkish.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Localization\Ukrainian.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Settings\ServerGameSettings.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\Settings\ServerHostSettings.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\StreamingAssets\UnityServicesProjectConfiguration.json" />
+      <_ContentIncludedByDefault Remove="servers\VRisingServer_Data\VersionDataSettings.json" />
+      <_ContentIncludedByDefault Remove="save-data-serverName\Saves\v1\world1\SessionId.json" />
+      <_ContentIncludedByDefault Remove="save-data-serverName\Saves\v1\world1\StartDate.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="save-data-serverName\**" />
+      <Compile Remove="servers\**" />
+      <Compile Remove="SteamCMD\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="save-data-serverName\**" />
+      <EmbeddedResource Remove="servers\**" />
+      <EmbeddedResource Remove="SteamCMD\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="save-data-serverName\**" />
+      <None Remove="servers\**" />
+      <None Remove="SteamCMD\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="save-data-serverName\**" />
+      <Content Remove="servers\**" />
+      <Content Remove="SteamCMD\**" />
     </ItemGroup>
 
 </Project>

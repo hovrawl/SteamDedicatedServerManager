@@ -6,6 +6,7 @@ using Serilog;
 using SteamCMD.ConPTY;
 using VRisingServerManagement.Models;
 using System;
+using VRisingServerManagement.Classes;
 using VRisingServerManagement.Services;
 
 namespace VRisingServerManagement.Controllers;
@@ -35,6 +36,11 @@ public class HomeController : Controller
     }
 
     public IActionResult Console()
+    {
+        return View();
+    }
+    
+    public IActionResult Configuration()
     {
         return View();
     }
@@ -88,10 +94,7 @@ public class HomeController : Controller
         var steamCmdDirectory = @".\SteamCMD";
         if (!Directory.Exists(steamCmdDirectory))
         {
-            return new JsonResult("bad")
-            {
-                StatusCode = StatusCodes.Status204NoContent
-            };
+            Directory.CreateDirectory(steamCmdDirectory);
         }
 
         var login = "anonymous";
@@ -243,5 +246,56 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    [HttpPost]
+    public JsonResult StartVRisingServer()
+    {
+        var launchConfig = new ServerLaunchConfiguration
+        {
+            ServerName = "Breadland Test",
+            SaveFolderLocation = @".\save-data",
+            SaveName = "Server Test",
+            LogPath = @".\logs\VRisingServer.log",
+
+        };
+        
+        ServerManager.ConfigureLaunch(launchConfig);
+        ServerManager.ConfigureServerLaunch();
+        
+        var serverProcess = ServerManager.ServerConsole;
+
+        // Attach message handlers
+        serverProcess.TitleReceived += ServerTitleReceived;
+        serverProcess.OutputDataReceived += ServerOutputDataReceived;
+        serverProcess.Exited += ServerExited;
+        
+        ServerManager.StartServer();
+
+        return new JsonResult("server started!")
+        {
+            StatusCode = StatusCodes.Status200OK
+        };
+    }
+
+    private void ServerTitleReceived(object? sender, string data)
+    {
+        Log.Information(data);
+        _downloadConsoleMessageBuilder.Append(data);
+        _consoleService.SendMessage(data, false);
+    }
+    
+    private void ServerOutputDataReceived(object? sender, string data)
+    {
+        Log.Information(data);
+        _downloadConsoleMessageBuilder.Append(data);
+        _consoleService.SendMessage(data, false);
+    }
+    
+    private void ServerExited(object? sender, int exitCode)
+    {
+        Log.Information("Server Closed");
+        _downloadConsoleMessageBuilder.Append("Server Closed");
+
     }
 }

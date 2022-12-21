@@ -6,8 +6,9 @@
     <h1 class="display-4">V Rising Server Manager</h1>
     <p>Cards that will link to Each page; Settings, Console</p>
     <button class="h-download-btn" type="button">Download V Rising Server</button>
+    <button class="h-start-server-btn" type="button">Start V Rising Server</button>
     
-    <textarea class="h-download-console">
+    <textarea class="h-download-console" readonly>
         
     </textarea>
 </div>
@@ -19,7 +20,7 @@
         
     }
 
-    function downloadVRisingServer(){
+    function downloadVRisingServer() {
         let downloadConsole = $('.h-download-console');
         let source = new EventSource('/console-sse');
         source.onopen = function (){
@@ -44,12 +45,37 @@
             }    
         })
     }
-    $(document).ready(function (){
+    
+    function startServer() {
+        let downloadConsole = $('.h-download-console');
+        fetch('@Url.Action("StartVRisingServer")', {
+                method: 'POST'
+        }).then((response) => {
+            // After server has started, we can reconnect the event server to the console
+            let source = new EventSource('/console-sse');
+            source.onopen = function (){
+                console.log('Server Console Connected');
+            }
+            source.onerror = function (event){
+                source.close();
+            }
+            source.onmessage = function (event){
+                if (event.data){
+                    downloadConsole.append(event.data);
+                    let consoleElement = downloadConsole.get(0);
+                    consoleElement.scrollTop = consoleElement.scrollHeight;
+                }
+            }  
+        })
+    }
+    
+    $(document).ready(function() {
         // on start function
         let downloadBtn = $('.h-download-btn');
         downloadBtn.on('click', downloadVRisingServer);
     
-        
+        let startServerBtn = $('.h-start-server-btn');
+        startServerBtn.on('click', startServer);
         
     });
     

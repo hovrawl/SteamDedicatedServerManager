@@ -3,14 +3,26 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">V Rising Server Manager</h1>
-    <p>Cards that will link to Each page; Settings, Console</p>
-    <button class="h-download-btn" type="button">Download V Rising Server</button>
-    <button class="h-start-server-btn" type="button">Start V Rising Server</button>
+    <h1 class="display-4">Steam Dedicated Server Manager</h1>
+    <p>Currently Running Servers</p>
+    @* <div> *@
+    @* <button class="h-download-btn" type="button">Download V Rising Server</button> *@
+    @*     <button class="h-start-server-btn" type="button">Start V Rising Server</button> *@
+    @*      *@
+    @*     <textarea class="h-download-console" readonly> *@
+    @*          *@
+    @*     </textarea> *@
+    @*          *@
+    @* </div> *@
     
-    <textarea class="h-download-console" readonly>
-        
-    </textarea>
+    <div class="h-server-cards-container">
+        <div class="h-server-card-wrapper">
+            <span class="h-server-heading">Server Title - Breadland</span>
+            <span class="h-server-detail">Game - V Rising</span>
+            <span class="h-server-sub-detail">Status - Running</span>
+            <button class="h-server-details-btn">Details</button>
+        </div>
+    </div>
 </div>
 
 
@@ -69,6 +81,10 @@
         })
     }
     
+   function serverDetails() {
+        window.location = "@Url.Action("Index", "Server", new { serverIdString = ""})";
+    }
+    
     $(document).ready(function() {
         // on start function
         let downloadBtn = $('.h-download-btn');
@@ -76,6 +92,9 @@
     
         let startServerBtn = $('.h-start-server-btn');
         startServerBtn.on('click', startServer);
+        
+        let serverDetailsBtn = $('.h-server-details-btn');
+        serverDetailsBtn.on('click', serverDetails);
         
     });
     

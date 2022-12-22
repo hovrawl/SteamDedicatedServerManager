@@ -1,0 +1,10 @@
+@model ServerDetailsViewModel
+
+@{
+    ViewBag.Title = "Steam Dedicated Server Manager";
+    var server = Model.ServerInstance;
+}
+
+<div class="h-server-details-container">
+    @server.LaunchConfiguration.ServerName
+</div>

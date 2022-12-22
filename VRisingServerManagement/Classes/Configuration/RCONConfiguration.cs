@@ -1,4 +1,4 @@
-namespace VRisingServerManagement.Classes;
+namespace VRisingServerManagement.Classes.Configuration;
 
 public class RCONConfiguration
 {

@@ -7,6 +7,9 @@ using SteamCMD.ConPTY;
 using VRisingServerManagement.Models;
 using System;
 using VRisingServerManagement.Classes;
+using VRisingServerManagement.Classes.Configuration;
+using VRisingServerManagement.Classes.Server;
+using VRisingServerManagement.Enums;
 using VRisingServerManagement.Services;
 
 namespace VRisingServerManagement.Controllers;
@@ -136,71 +139,6 @@ public class HomeController : Controller
             Thread.Sleep(1000);   
         }
 
-        // var steamCmdProcess = new Process();
-        // steamCmdProcess.StartInfo.UseShellExecute = false;
-        // steamCmdProcess.StartInfo.RedirectStandardError = true;
-        // steamCmdProcess.StartInfo.RedirectStandardOutput = true;
-        // steamCmdProcess.StartInfo.RedirectStandardInput = true;
-        // steamCmdProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        // steamCmdProcess.StartInfo.CreateNoWindow = true;
-        // steamCmdProcess.StartInfo.ErrorDialog = false;
-        // steamCmdProcess.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
-        // steamCmdProcess.StartInfo.FileName = steamCmdExe;
-        // steamCmdProcess.StartInfo.Arguments = $"+force_install_dir {ServerPathInstallation} +login {login} +app_update {SteamAppID} {validateApp} +quit";
-        //
-        // steamCmdProcess.Start();
-        //
-        // using (ManualResetEvent mreOut = new ManualResetEvent(false),
-        //        mreErr = new ManualResetEvent(false))
-        // {
-        //     steamCmdProcess.OutputDataReceived += (o, e) =>
-        //     {
-        //         if (e.Data == null) mreOut.Set();
-        //         else Log.Information(e.Data);
-        //     };
-        //     steamCmdProcess.BeginOutputReadLine();
-        //     steamCmdProcess.ErrorDataReceived += (o, e) =>
-        //     {
-        //         if (e.Data == null) mreErr.Set();
-        //         else Log.Error(e.Data);
-        //     };
-        //     steamCmdProcess.BeginErrorReadLine();
-        //
-        //     // var emptyLineCount = 0;
-        //     // while (emptyLineCount < 3)
-        //     // {
-        //     //     steamCmdProcess.StandardInput.WriteLine("");
-        //     //     emptyLineCount++;
-        //     //     //var lineOutPut = steamCmdProcess.StandardOutput.ReadLine();
-        //     //     // if (string.IsNullOrEmpty(lineOutPut))
-        //     //     // {
-        //     //     //     emptyLineCount++;
-        //     //     // } 
-        //     //     // else
-        //     //     // {
-        //     //     //     Log.Information(lineOutPut);
-        //     //     //     emptyLineCount = 0;
-        //     //     // }
-        //     // }
-        //     
-        //     //
-        //     // var output = steamCmdProcess.StandardOutput.ReadLine();
-        //     // while (!ModalChecker.IsWaitingForUserInput(steamCmdProcess))
-        //     // {
-        //     //     steamCmdProcess.StandardInput.WriteLine("ww");
-        //     //     Thread.Sleep(1000);   
-        //     // }
-        //     //var result = steamCmdProcess.StandardOutput.ReadToEnd();
-        //     
-        //     steamCmdProcess.WaitForExit();
-        //
-        //     steamCmdProcess.StandardInput.Close();
-        //     mreOut.WaitOne();
-        //     mreErr.WaitOne();
-        // }
-        // var code = steamCmdProcess.ExitCode;
-        // //steamCmdProcess.WaitForExit();
-        // steamCmdProcess.Dispose();
         var returnResult = new JsonResult(code)
         {
             StatusCode = StatusCodes.Status200OK
@@ -251,7 +189,7 @@ public class HomeController : Controller
     [HttpPost]
     public JsonResult StartVRisingServer()
     {
-        var launchConfig = new ServerLaunchConfiguration
+        var launchConfig = new VRisingServerLaunchConfiguration
         {
             ServerName = "Breadland Test",
             SaveFolderLocation = @".\save-data",
@@ -260,17 +198,11 @@ public class HomeController : Controller
 
         };
         
-        ServerManager.ConfigureLaunch(launchConfig);
-        ServerManager.ConfigureServerLaunch();
+        var serverInstance = ServerManager.CreateServer(GameServer.VRising);
         
-        var serverProcess = ServerManager.ServerConsole;
+        serverInstance.SetLaunchConfiguration(launchConfig);
 
-        // Attach message handlers
-        serverProcess.TitleReceived += ServerTitleReceived;
-        serverProcess.OutputDataReceived += ServerOutputDataReceived;
-        serverProcess.Exited += ServerExited;
-        
-        ServerManager.StartServer();
+        serverInstance.StartServer();
 
         return new JsonResult("server started!")
         {
@@ -278,24 +210,5 @@ public class HomeController : Controller
         };
     }
 
-    private void ServerTitleReceived(object? sender, string data)
-    {
-        Log.Information(data);
-        _downloadConsoleMessageBuilder.Append(data);
-        _consoleService.SendMessage(data, false);
-    }
-    
-    private void ServerOutputDataReceived(object? sender, string data)
-    {
-        Log.Information(data);
-        _downloadConsoleMessageBuilder.Append(data);
-        _consoleService.SendMessage(data, false);
-    }
-    
-    private void ServerExited(object? sender, int exitCode)
-    {
-        Log.Information("Server Closed");
-        _downloadConsoleMessageBuilder.Append("Server Closed");
-
-    }
+ 
 }

@@ -1,6 +1,6 @@
-namespace VRisingServerManagement.Classes;
+namespace VRisingServerManagement.Classes.Configuration;
 
-public class ServerHostConfiguration
+public class VRisingServerHostConfiguration : IServerHostConfiguration
 {
     public string Name { get; set; }
     

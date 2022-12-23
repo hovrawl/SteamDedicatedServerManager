@@ -9,8 +9,12 @@ public interface IServerInstance
     #region Fields
     Guid Id { get; set; }
     
+    string Name { get; set; }
+    
     GameServer GameType { get; }
     
+    ServerStatus ServerStatus { get; }
+        
     WindowsPseudoConsole Console { get; set; }
 
     IServerLaunchConfiguration LaunchConfiguration { get; }

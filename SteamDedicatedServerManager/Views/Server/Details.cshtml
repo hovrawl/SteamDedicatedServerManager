@@ -1,0 +1,94 @@
+@model ServerDetailsViewModel
+
+@{
+    var server = Model.ServerInstance;
+    var titleFragment = $"{server?.Name} ";
+    var serverId = server?.Id.ToString() ?? "";
+    ViewBag.Title = $"Steam Dedicated Server Manager - {titleFragment}Server Details";
+}
+
+<div class="h-server-details-container">
+    <span>@server?.Name</span>
+    <span>@server?.GameType.ToString("G")</span>
+    <span>@server?.ServerStatus.ToString("G")</span>
+    
+    <div>
+        <button class="h-start-server-btn" type="button" data-id="@serverId">Start Server</button>
+        <button class="h-stop-server-btn" type="button" data-id="@serverId">Stop Server</button>
+        <button class="h-connect-console-btn" type="button">Connect Console</button>
+        
+        <textarea class="h-server-console" readonly>
+        
+        </textarea>
+        
+    </div>
+</div>
+
+<script type="text/javascript">
+    let consoleSse = null;
+    function connectConsole (){
+        let serverConsole = $('.h-server-console');
+        let source = new EventSource('/console-sse');
+        source.onopen = function (){
+            console.log('Server Console Connected');
+        }
+        source.onerror = function (event){
+            source.close();
+        }
+        source.onmessage = function (event){
+            if (event.data){
+                //console.log(event.data); 
+                serverConsole.append(event.data);
+                let consoleElement = serverConsole.get(0);
+                consoleElement.scrollTop = consoleElement.scrollHeight;            
+            }
+        }  
+        consoleSse = source;
+    }
+
+    function startServer(e) {
+        let target = $(e.target);
+        let serverId = target.attr('data-id');    
+        let formData = new FormData(); 
+        formData.append('serverIdString', serverId);
+        fetch('@Url.Action("StartServer")', {
+                method: 'POST',
+                body: formData,
+        }).then((response) => {
+            console.log(response)
+            
+            connectConsole();
+        })
+    }
+    
+    function stopServer(e) {
+        let target = $(e.target);
+        let serverId = target.attr('data-id');        
+        let formData = new FormData(); 
+        
+        formData.append('serverIdString', serverId);
+        fetch('@Url.Action("StartServer")', {
+                method: 'POST',
+                body: formData,               
+        }).then((response) => {
+            console.log(response)
+            
+            if (consoleSse && consoleSse.close) {
+                consoleSse.close()
+            }
+        })
+    }
+    
+    $(document).ready(function() {
+        // on start function
+        let createServerBtn = $('.h-connect-console-btn');
+        createServerBtn.on('click', connectConsole);
+    
+        let startServerBtn = $('.h-start-server-btn');
+        startServerBtn.on('click', startServer);
+        
+        let serverDetailsBtn = $('.stop-server-btn');
+        serverDetailsBtn.on('click', stopServer);
+        
+    });
+</script>

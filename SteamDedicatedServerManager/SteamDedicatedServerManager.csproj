@@ -96,4 +96,8 @@
       <Content Remove="SteamCMD\**" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Classes\Helpers" />
+    </ItemGroup>
+
 </Project>

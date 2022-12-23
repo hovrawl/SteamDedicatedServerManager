@@ -30,7 +30,7 @@ public class HomeController : Controller
         Log.Logger = new LoggerConfiguration()
             .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
-
+        ServerManager.SetConsoleMessages(_consoleService);
     }
 
     public IActionResult Index()
@@ -90,62 +90,6 @@ public class HomeController : Controller
         var returnResult = new JsonResult("ok");
         return returnResult;
     }
-    
-    [HttpPost]
-    public JsonResult DownloadVRisingServer()
-    {
-        var steamCmdDirectory = @".\SteamCMD";
-        if (!Directory.Exists(steamCmdDirectory))
-        {
-            Directory.CreateDirectory(steamCmdDirectory);
-        }
-
-        var login = "anonymous";
-        var SteamAppID = "1829350";
-        var ServerPathInstallation = @"..\Servers";
-        var validateApp = ""; // set to 'validate' to validate the application
-        var steamCMDConPTY = new SteamCMDConPTY()
-        {
-            Arguments = $"+force_install_dir {ServerPathInstallation} +login {login} +app_update {SteamAppID} {validateApp} +quit"
-        };
-        var exited = false;
-        var code = 0;
-            
-        steamCMDConPTY.WorkingDirectory = steamCmdDirectory;
-        steamCMDConPTY.TitleReceived += (sender, data) =>
-        {
-            Log.Information(data);
-            _downloadConsoleMessageBuilder.Append(data);
-            _consoleService.SendMessage(data, false);
-        };
-        steamCMDConPTY.OutputDataReceived += (sender, data) =>
-        {
-            Log.Information(data);
-            _downloadConsoleMessageBuilder.Append(data);
-            _consoleService.SendMessage(data, false);
-        };
-        steamCMDConPTY.Exited += (sender, exitCode) =>
-        {
-            exited = true;
-            code = exitCode;
-            //new HomeController(_logger).DownloadConsoleMessage("Server Downloaded");
-            //DownloadConsoleMessage("Server Downloaded");
-            _downloadConsoleMessageBuilder.Append("Server Downloaded");
-        };
-        steamCMDConPTY.Start();
-
-        while (!exited)
-        {
-            Thread.Sleep(1000);   
-        }
-
-        var returnResult = new JsonResult(code)
-        {
-            StatusCode = StatusCodes.Status200OK
-        };
-        
-        return returnResult;
-    }
 
     // [HttpGet]
     // public async Task DownloadConsoleMessage()
@@ -186,29 +130,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    [HttpPost]
-    public JsonResult StartVRisingServer()
-    {
-        var launchConfig = new VRisingServerLaunchConfiguration
-        {
-            ServerName = "Breadland Test",
-            SaveFolderLocation = @".\save-data",
-            SaveName = "Server Test",
-            LogPath = @".\logs\VRisingServer.log",
-
-        };
-        
-        var serverInstance = ServerManager.CreateServer(GameServer.VRising);
-        
-        serverInstance.SetLaunchConfiguration(launchConfig);
-
-        serverInstance.StartServer();
-
-        return new JsonResult("server started!")
-        {
-            StatusCode = StatusCodes.Status200OK
-        };
-    }
+  
 
  
 }

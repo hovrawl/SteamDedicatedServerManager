@@ -3,6 +3,7 @@ using Serilog;
 using SteamCMD.ConPTY;
 using SteamDedicatedServerManager.Classes.Configuration;
 using SteamDedicatedServerManager.Enums;
+using SteamDedicatedServerManager.Services;
 
 namespace SteamDedicatedServerManager.Classes.Server;
 
@@ -10,7 +11,11 @@ public class VRisingServerInstance : IServerInstance
 {
     public Guid Id { get; set; }
     
+    public string Name { get; set; }
+    
     public GameServer GameType => GameServer.VRising;
+    
+    public ServerStatus ServerStatus { get; private set; }
 
     public WindowsPseudoConsole Console { get; set; }
     
@@ -19,6 +24,8 @@ public class VRisingServerInstance : IServerInstance
     
     public IServerGameConfiguration GameConfiguration { get; set;  }
 
+    public IConsoleService ConsoleService { get; set; }
+    
     public void StartServer()
     {
         if (Console == null) return;
@@ -39,7 +46,7 @@ public class VRisingServerInstance : IServerInstance
         serverArguments.Append($"-logFile {LaunchConfiguration.LogPath}");
         
         var ServerExeName = @"VRisingServer.exe";
-        var ServerPathInstallation = @".\Servers";
+        var ServerPathInstallation = $@".\Servers\{GameType:G}";
         if (Console == null)
         {
             // Create server console process
@@ -75,18 +82,21 @@ public class VRisingServerInstance : IServerInstance
     public void ServerTitleReceived(object? sender, string data)
     {
         Log.Information(data);
-        //_consoleService.SendMessage(data, false);
+        ConsoleService?.SendMessage(data, false);
+        ServerStatus = ServerStatus.Running;
     }
-    
+        
     public void ServerOutputDataReceived(object? sender, string data)
     {
         Log.Information(data);
-        //_consoleService.SendMessage(data, false);
+        ConsoleService?.SendMessage(data, false);
     }
     
     public void ServerExited(object? sender, int exitCode)
     {
         Log.Information("Server Closed");
-        //_consoleService.SendMessage("Server Closed");
+        ConsoleService?.SendMessage("Server Closed");
+        ServerStatus = ServerStatus.Stopped;
+
     }
 }

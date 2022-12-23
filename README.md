@@ -1,2 +1,2 @@
-# VRisingServerManager
-V Rising Server Manager Web Application
+# Steam Dedicated Server Manager
+Steam Dedicated Server Manager Web Application

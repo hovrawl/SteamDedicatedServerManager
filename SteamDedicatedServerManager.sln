@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRisingServerManagement", "VRisingServerManagement\VRisingServerManagement.csproj", "{F9D7F09F-1BCC-4451-A5F8-8F6511839F62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamDedicatedServerManager", "SteamDedicatedServerManager\SteamDedicatedServerManager.csproj", "{F9D7F09F-1BCC-4451-A5F8-8F6511839F62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

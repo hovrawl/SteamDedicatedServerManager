@@ -1,0 +1,124 @@
+2022-12-21 16:37:57.495 +11:00 [INF] C:\DEV\Hovrawl\VRisingServerManager\VRisingServerManagement\SteamCMD\steamcmd.exe
+2022-12-21 16:37:57.497 +11:00 [INF] [?25l
+2022-12-21 16:37:57.517 +11:00 [INF] Redirecting stderr to 'C:\DEV\Hovrawl\VRisingServerManager\VRisingServerManagement\SteamCMD\logs\stderr.txt'
+[  0%] Checking for available updates...[68X
+
+2022-12-21 16:37:57.766 +11:00 [INF] [----] Verifying installation...
+
+2022-12-21 16:37:57.974 +11:00 [INF] Steam Console Client (c) Valve Corporation
+2022-12-21 16:37:58.001 +11:00 [INF] Steam Console Client (c) Valve Corporation - version 1669935972
+-- type 'quit' to exit --[38X
+Loading Steam API...[43X
+2022-12-21 16:37:58.192 +11:00 [INF] OK
+
+2022-12-21 16:37:58.216 +11:00 [INF] 
+Connecting anonymously to Steam Public...
+2022-12-21 16:37:59.572 +11:00 [INF] OK
+
+2022-12-21 16:37:59.587 +11:00 [INF] Waiting for client config...
+2022-12-21 16:38:00.317 +11:00 [INF] OK
+
+2022-12-21 16:38:00.348 +11:00 [INF] Waiting for user info...OK
+
+2022-12-21 16:38:00.691 +11:00 [INF] Success! App '1829350' already up to date.
+
+2022-12-21 18:36:34.302 +11:00 [INF] C:\DEV\Hovrawl\VRisingServerManager\VRisingServerManagement\SteamCMD\steamcmd.exe
+2022-12-21 18:36:34.327 +11:00 [INF] [?25l
+2022-12-21 18:36:34.339 +11:00 [INF] Redirecting stderr to 'C:\DEV\Hovrawl\VRisingServerManager\VRisingServerManagement\SteamCMD\logs\stderr.txt'
+
+2022-12-21 18:36:34.434 +11:00 [INF] [  0%] Checking for available updates...
+
+2022-12-21 18:36:34.695 +11:00 [INF] [----] Verifying installation...
+
+2022-12-21 18:36:34.901 +11:00 [INF] Steam Console Client (c) Valve Corporation
+2022-12-21 18:36:34.913 +11:00 [INF] Steam Console Client (c) Valve Corporation - version 1669935972
+-- type 'quit' to exit --[38X
+Loading Steam API...[43X
+2022-12-21 18:36:35.185 +11:00 [INF] OK
+
+2022-12-21 18:36:35.207 +11:00 [INF] 
+Connecting anonymously to Steam Public...
+2022-12-21 18:36:36.772 +11:00 [INF] OK
+
+2022-12-21 18:36:36.787 +11:00 [INF] Waiting for client config...
+2022-12-21 18:36:38.075 +11:00 [INF] OK
+
+2022-12-21 18:36:38.089 +11:00 [INF] Waiting for user info...OK
+
+2022-12-21 18:36:38.574 +11:00 [INF]  Update state (0x11) preallocating, progress: 37.58 (638489954 / 1698925454)
+
+2022-12-21 18:36:40.002 +11:00 [INF]  Update state (0x61) downloading, progress: 0.19 (3145728 / 1698925454)
+
+2022-12-21 18:36:42.009 +11:00 [INF]  Update state (0x61) downloading, progress: 1.78 (30271456 / 1698925454)
+
+2022-12-21 18:36:44.008 +11:00 [INF]  Update state (0x61) downloading, progress: 8.58 (145711880 / 1698925454)
+
+2022-12-21 18:36:46.002 +11:00 [INF]  Update state (0x61) downloading, progress: 18.69 (317449938 / 1698925454)
+
+2022-12-21 18:36:48.026 +11:00 [INF]  Update state (0x61) downloading, progress: 22.41 (380691927 / 1698925454)
+
+2022-12-21 18:36:50.025 +11:00 [INF]  Update state (0x61) downloading, progress: 24.85 (422244046 / 1698925454)
+
+2022-12-21 18:36:52.006 +11:00 [INF]  Update state (0x61) downloading, progress: 30.03 (510187292 / 1698925454)
+
+2022-12-21 18:36:54.019 +11:00 [INF]  Update state (0x61) downloading, progress: 42.86 (728123205 / 1698925454)
+
+2022-12-21 18:36:56.011 +11:00 [INF]  Update state (0x61) downloading, progress: 50.46 (857255198 / 1698925454)
+
+2022-12-21 18:36:58.025 +11:00 [INF]  Update state (0x61) downloading, progress: 57.65 (979488971 / 1698925454)
+
+2022-12-21 18:37:00.024 +11:00 [INF]  Update state (0x61) downloading, progress: 61.44 (1043795532 / 1698925454)
+
+2022-12-21 18:37:02.028 +11:00 [INF]  Update state (0x61) downloading, progress: 65.11 (1106249944 / 1698925454)
+
+2022-12-21 18:37:04.014 +11:00 [INF]  Update state (0x61) downloading, progress: 67.21 (1141901528 / 1698925454)
+
+2022-12-21 18:37:06.015 +11:00 [INF]  Update state (0x61) downloading, progress: 68.88 (1170213080 / 1698925454)
+
+2022-12-21 18:37:08.012 +11:00 [INF]  Update state (0x61) downloading, progress: 70.79 (1202718936 / 1698925454)
+
+2022-12-21 18:37:10.014 +11:00 [INF]  Update state (0x61) downloading, progress: 72.99 (1240120691 / 1698925454)
+
+2022-12-21 18:37:12.026 +11:00 [INF]  Update state (0x61) downloading, progress: 74.85 (1271577971 / 1698925454)
+
+2022-12-21 18:37:14.074 +11:00 [INF]  Update state (0x61) downloading, progress: 76.52 (1299962791 / 1698925454)
+
+2022-12-21 18:37:16.006 +11:00 [INF]  Update state (0x61) downloading, progress: 78.45 (1332851588 / 1698925454)
+2022-12-21 18:37:16.033 +11:00 [INF] 
+
+2022-12-21 18:37:18.027 +11:00 [INF]  Update state (0x61) downloading, progress: 80.97 (1375565218 / 1698925454)
+2022-12-21 18:37:18.042 +11:00 [INF] 
+
+2022-12-21 18:37:20.032 +11:00 [INF]  Update state (0x61) downloading, progress: 82.88 (1408071074 / 1698925454)
+2022-12-21 18:37:20.045 +11:00 [INF] 
+
+2022-12-21 18:37:22.010 +11:00 [INF]  Update state (0x61) downloading, progress: 84.98 (1443751781 / 1698925454)
+2022-12-21 18:37:22.025 +11:00 [INF] 
+
+2022-12-21 18:37:24.006 +11:00 [INF]  Update state (0x61) downloading, progress: 87.24 (1482200542 / 1698925454)
+2022-12-21 18:37:24.020 +11:00 [INF] 
+
+2022-12-21 18:37:26.004 +11:00 [INF]  Update state (0x61) downloading, progress: 89.03 (1512511099 / 1698925454)
+2022-12-21 18:37:26.035 +11:00 [INF] 
+
+2022-12-21 18:37:28.030 +11:00 [INF]  Update state (0x61) downloading, progress: 92.09 (1564568169 / 1698925454)
+2022-12-21 18:37:28.040 +11:00 [INF] 
+
+2022-12-21 18:37:30.024 +11:00 [INF]  Update state (0x61) downloading, progress: 94.02 (1597363422 / 1698925454)
+2022-12-21 18:37:30.040 +11:00 [INF] 
+
+2022-12-21 18:37:32.027 +11:00 [INF]  Update state (0x61) downloading, progress: 97.22 (1651729609 / 1698925454)
+2022-12-21 18:37:32.043 +11:00 [INF] 
+
+2022-12-21 18:37:34.004 +11:00 [INF]  Update state (0x81) verifying update, progress: 2.46 (41805792 / 1698925454)
+2022-12-21 18:37:34.008 +11:00 [INF] 
+
+2022-12-21 18:37:36.020 +11:00 [INF]  Update state (0x81) verifying update, progress: 43.61 (740876465 / 1698925454)
+2022-12-21 18:37:36.036 +11:00 [INF] 
+
+2022-12-21 18:37:38.012 +11:00 [INF]  Update state (0x81) verifying update, progress: 84.81 (1440874644 / 1698925454)
+2022-12-21 18:37:38.027 +11:00 [INF] 
+
+2022-12-21 18:37:39.056 +11:00 [INF] Success! App '1829350' fully installed.
+2022-12-21 18:37:39.067 +11:00 [INF] 
+

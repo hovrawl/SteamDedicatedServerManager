@@ -1,0 +1,25 @@
+2022-12-21 16:37:50.793 +11:00 [INF] C:\DEV\Hovrawl\VRisingServerManager\VRisingServerManagement\SteamCMD\steamcmd.exe
+2022-12-21 16:37:50.795 +11:00 [INF] [?25l
+2022-12-21 16:37:50.804 +11:00 [INF] Redirecting stderr to 'C:\DEV\Hovrawl\VRisingServerManager\VRisingServerManagement\SteamCMD\logs\stderr.txt'
+
+2022-12-21 16:37:50.933 +11:00 [INF] [  0%] Checking for available updates...
+
+2022-12-21 16:37:51.194 +11:00 [INF] [----] Verifying installation...
+
+2022-12-21 16:37:51.396 +11:00 [INF] Steam Console Client (c) Valve Corporation
+2022-12-21 16:37:51.425 +11:00 [INF] Steam Console Client (c) Valve Corporation - version 1669935972
+-- type 'quit' to exit --[38X
+Loading Steam API...[43X
+2022-12-21 16:37:51.628 +11:00 [INF] OK
+
+2022-12-21 16:37:51.643 +11:00 [INF] 
+Connecting anonymously to Steam Public...
+2022-12-21 16:37:53.039 +11:00 [INF] OK
+
+2022-12-21 16:37:53.055 +11:00 [INF] Waiting for client config...
+2022-12-21 16:37:53.971 +11:00 [INF] OK
+
+2022-12-21 16:37:53.986 +11:00 [INF] Waiting for user info...OK
+
+2022-12-21 16:37:54.346 +11:00 [INF] Success! App '1829350' already up to date.
+

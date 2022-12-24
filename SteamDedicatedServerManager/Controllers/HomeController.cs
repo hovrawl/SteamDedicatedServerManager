@@ -35,7 +35,14 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        var servers = ServerManager.Servers;
+   
+        
+        var viewModel = new HomeViewModel()
+        {
+            ServerInstances = servers
+        };
+        return View(viewModel);
     }
 
     public IActionResult Console()

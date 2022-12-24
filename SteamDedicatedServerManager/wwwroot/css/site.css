@@ -14,10 +14,29 @@ html {
 }
 
 body {
+  margin: 0;
   margin-bottom: 60px;
+  height: 100vh;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+main{
+  overflow:auto;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+.container{
+  overflow: auto;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
 }
 
-.h-download-console{
+.h-download-console, .h-server-console{
   resize: both;
 }
 
@@ -48,4 +67,35 @@ body {
 
 .h-server-sub-detail{
   font-size: 14px;
+}
+
+.h-server-details-container{
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.h-server-details{
+  display: flex;
+  flex-direction: column;
+  /*overflow: auto;*/
+}
+
+.h-server-console-container{
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  overflow: auto;
+  border: 1px solid grey;
+  margin: 1em;
+  border-radius: 4px;
+}
+
+.h-server-messages{
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  overflow: auto;
+  
 }

@@ -1,6 +1,8 @@
+using LiteDB;
 using SteamCMD.ConPTY;
 using SteamDedicatedServerManager.Classes.Configuration;
 using SteamDedicatedServerManager.Enums;
+using SteamDedicatedServerManager.Services;
 
 namespace SteamDedicatedServerManager.Classes.Server;
 
@@ -14,7 +16,8 @@ public interface IServerInstance
     GameServer GameType { get; }
     
     ServerStatus ServerStatus { get; }
-        
+    
+    [BsonIgnore]
     WindowsPseudoConsole Console { get; set; }
 
     IServerLaunchConfiguration LaunchConfiguration { get; }
@@ -22,16 +25,23 @@ public interface IServerInstance
     IServerHostConfiguration HostConfiguration { get; }
     
     IServerGameConfiguration GameConfiguration { get; }
+    
+    IConsoleService ConsoleService { get; set; }
+
     #endregion
     
     #region Methods
     void StartServer();
+    
+    void StopServer();
 
     void SetLaunchConfiguration(IServerLaunchConfiguration launchConfiguration);
     
     void SetHostConfiguration(IServerHostConfiguration hostConfiguration);
     
     void SetGameConfiguration(IServerGameConfiguration gameConfiguration);
+    
+    void ConnectConsole();
     #endregion
     
     #region Events

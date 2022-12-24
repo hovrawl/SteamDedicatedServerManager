@@ -1,31 +1,28 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "V Rising Server Manager";
+    var serverListViewModel = new ServerListViewModel()
+    {
+        ServerInstances = Model.ServerInstances
+    };
 }
 
 <div class="text-center">
     <h1 class="display-4">Steam Dedicated Server Manager</h1>
     <p>Currently Running Servers</p>
 
-    <div class="h-server-cards-container">
-        <div class="h-server-card-wrapper">
-            <span class="h-server-heading">Server Title - Breadland</span>
-            <span class="h-server-detail">Game - V Rising</span>
-            <span class="h-server-sub-detail">Status - Running</span>
-            <button class="h-server-details-btn">Details</button>
-        </div>
-    </div>
+    @await Html.PartialAsync(@"..\Server\_List", serverListViewModel)
+
 </div>
 
 
 <script type="text/javascript">   
-    VRisingServerManager = {
-        
-        
-    }
-  
     
-   function serverDetails() {
-        window.location = "@Url.Action("Index", "Server", new { serverIdString = ""})";
+   function serverDetails(e) {
+        let target = $(e.target);
+        let serverId = target.attr('data-id');
+        let url = "@Url.Action("Details", "Server")";
+        window.location = url + '?serverIdString=' + serverId;
     }
     
     $(document).ready(function() {

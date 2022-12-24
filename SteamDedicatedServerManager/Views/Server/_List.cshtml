@@ -1,0 +1,22 @@
+@model ServerListViewModel
+
+@{
+    var servers = Model.ServerInstances;
+}
+
+<div class="h-server-list-container">
+    @{
+        foreach (var server in servers)
+        {
+            <div class="h-server-cards-container">
+                <div class="h-server-card-wrapper">
+                    <span class="h-server-heading">@server.Name</span>
+                    <span class="h-server-detail">Game - @server.GameType.ToString("G")</span>
+                    <span class="h-server-sub-detail">Status - @server.ServerStatus.ToString("G")</span>
+                    <button class="h-server-details-btn" data-id="@server.Id.ToString()">Details</button>
+                    <button class="h-start-server-btn" data-id="@server.Id.ToString()">Start Server</button>
+                </div>
+            </div>
+        }
+    }
+</div>

@@ -1,5 +1,6 @@
 using System.Text;
 using System.ComponentModel;
+using LiteDB;
 using Serilog;
 using SteamCMD.ConPTY;
 using SteamDedicatedServerManager.Enums;
@@ -11,6 +12,7 @@ namespace SteamDedicatedServerManager.Classes.Server;
 
 public sealed class ServerManager
 {
+    #region Fields
     // ----- Singleton Accessors ----- //
 
     private static ServerManager _instance = new();
@@ -33,10 +35,25 @@ public sealed class ServerManager
     public static List<IServerInstance> Servers => _servers;
 
     private static string ServerPathInstallation = @".\Servers";
+    
+    private static IConsoleService _consoleService;
 
+    private static string _liteDbConnectionString = "";
+    private static string _databaseName = @"Servers.db";
+    private static string  _dbName = @"Servers";
+    private static string _serverDirectory = @".\Databases\";
+
+    #endregion
+    
     #region Methods
 
-    private static IConsoleService _consoleService;
+    public static void Initialise()
+    {
+        _liteDbConnectionString = Path.Combine(_serverDirectory, _databaseName);
+        LoadServerList();
+        
+    }
+    
     public static void SetConsoleMessages(IConsoleService consoleService)
     {
         _consoleService = consoleService;
@@ -111,6 +128,7 @@ public sealed class ServerManager
         }
 
         _servers.Add(returnInstance);
+        UpsertServer(returnInstance);
         return returnInstance;
     }
 
@@ -121,5 +139,69 @@ public sealed class ServerManager
     
 
     #endregion
-   
+
+    #region LiteDb
+
+    private static void LoadServerList()
+    {
+        if(!Directory.Exists(_serverDirectory))
+        {
+            Directory.CreateDirectory(_serverDirectory);
+        }
+        
+        using (var db = new LiteDatabase(_liteDbConnectionString))
+        {
+            // Get a collection (or create, if doesn't exist)
+            var col = db.GetCollection<IServerInstance>(_dbName);
+
+            var servers = col.FindAll();
+            _servers = servers.ToList();
+        }
+    }
+    
+    public static void WriteServerList()
+    {
+        using (var db = new LiteDatabase(_liteDbConnectionString))
+        {
+            // Get a collection (or create, if doesn't exist)
+            var col = db.GetCollection<IServerInstance>(_dbName);
+
+            foreach (var server in _servers)
+            {
+                col.Upsert(server);
+                col.EnsureIndex(x => x.Id);
+            }
+        }
+    }
+
+    public static void UpsertServer(IServerInstance serverInstance)
+    {
+        using (var db = new LiteDatabase(_liteDbConnectionString))
+        {
+            // Get a collection (or create, if doesn't exist)
+            var col = db.GetCollection<IServerInstance>(_dbName);
+
+            var server = col.FindOne(i => i.Id.Equals(serverInstance.Id));
+            if (server != null)
+            {
+                col.Upsert(serverInstance);
+            }
+            else
+            {
+                col.Insert(serverInstance);
+            }
+        }
+    }
+    
+    public static void DeleteServer(Guid id)
+    {
+        using (var db = new LiteDatabase(_liteDbConnectionString))
+        {
+            // Get a collection (or create, if doesn't exist)
+            var col = db.GetCollection<IServerInstance>(_dbName);
+            var deletedCount = col.DeleteMany(i => i.Id.Equals(id));
+        }
+    }
+
+    #endregion
 }

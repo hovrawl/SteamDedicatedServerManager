@@ -7,30 +7,11 @@
 <div>
     <button class="h-create-server-btn">Create V Rising Server</button>
 </div>
-<div class="h-server-list-container">
-    @{
-        foreach (var server in servers)
-        {
-            <div class="h-server-cards-container">
-                <div class="h-server-card-wrapper">
-                    <span class="h-server-heading">@server.Name</span>
-                    <span class="h-server-detail">Game - @server.GameType.ToString("G")</span>
-                    <span class="h-server-sub-detail">Status - @server.ServerStatus.ToString("G")</span>
-                    <button class="h-server-details-btn" data-id="@server.Id.ToString()">Details</button>
-                    <button class="h-start-server-btn" data-id="@server.Id.ToString()">Start Server</button>
-                </div>
-            </div>
-        }
-    }
-</div>
+
+@await Html.PartialAsync("_List", Model)
 
 
-<script type="text/javascript">   
-    VRisingServerManager = {
-        
-        
-    }
-
+<script type="text/javascript">
     function createServer() {
         // let downloadConsole = $('.h-download-console');
         let source = new EventSource('/console-sse');
@@ -99,7 +80,7 @@
         })
     }
     
-   function serverDetails(e) {
+    function serverDetails(e) {
         let target = $(e.target);
         let serverId = target.attr('data-id');
         let url = "@Url.Action("Details", "Server")";

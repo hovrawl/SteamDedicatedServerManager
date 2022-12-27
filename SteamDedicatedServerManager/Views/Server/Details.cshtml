@@ -7,20 +7,47 @@
     ViewBag.Title = $"Steam Dedicated Server Manager - {titleFragment}Server Details";
 }
 
-<div class="h-server-details-container">
-    <div class="h-server-details">
-        <span>@server?.Name</span>
-        <span>@server?.GameType.ToString("G")</span>
-        <span>@server?.ServerStatus.ToString("G")</span>
+<div class="d-flex flex-column flex-grow-1 h-server-details-container">
+    <div class="h-server-btns">
+        <button class="h-start-server-btn btn btn-primary" type="button" data-id="@serverId">Start Server</button>
+        <button class="h-stop-server-btn  btn btn-primary" type="button" data-id="@serverId">Stop Server</button>
+    </div>
+    
+    <div class="h-server-details d-flex flex-column">
+        <h5>@server?.Name</h5>
+        <p>@server?.GameType.ToString("G")</p>
+        <p>@server?.ServerStatus.ToString("G")</p>
     </div>
 
-    <div class="h-server-btns">
-        <button class="h-start-server-btn" type="button" data-id="@serverId">Start Server</button>
-        <button class="h-stop-server-btn" type="button" data-id="@serverId">Stop Server</button>
-        <button class="h-connect-console-btn" type="button" data-id="@serverId">Connect Console</button>
+    @* <div class="h-server-navigation container"> *@
+    @*     <div class="h-collapse-btns"> *@
+    @*         <button class="btn btn-primary" type="button" data-view="console"> *@
+    @*             Console *@
+    @*         </button> *@
+    @*         <button class="btn btn-primary" type="button" data-view="settings"> *@
+    @*             Config *@
+    @*         </button> *@
+    @*     </div> *@
+    @* </div> *@
+    <ul class="nav nav-pills" role="tablist" id="server-navigation">
+        <li class="nav-item">
+        <button class="nav-link active" id="console-tab" data-bs-toggle="tab" data-bs-target="#console" type="button" role="tab" aria-controls="console" aria-selected="true">Console</button>
+        </li>
+        <li class="nav-item">
+        <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Config</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="server-navigation-content">
+        <div id="console" class="tab-pane fade show active">
+            @await Html.PartialAsync("_Console", Model)
+        </div>
+        <div id="settings" class="tab-pane fade">
+            @await Html.PartialAsync("_Settings", Model)
+        </div>
+      
     </div>
-    <div class="h-server-console-container">
-        <span class="h-server-messages"></span>
+   
+    <div class="container d-flex flex-column flex-grow-1 overflow-auto" id="server-details-partial-container">
     </div>
 </div>
 
@@ -88,6 +115,41 @@
             }
         })
     }
+    
+    function bindPartialNavigation(){
+        let serverId = '@serverId';
+        let serverNavigation = $('.h-server-navigation');
+        let navigationBtns = serverNavigation.find('.btn');
+        navigationBtns.on('click', function(e){
+            let element = $(e.currentTarget);
+            let viewName = element.attr('data-view');
+            let partialUrl = '@Url.Action("Settings")';
+            switch (viewName){
+                case 'settings':{
+                    partialUrl = '@Url.Action("Settings")';
+                    break;    
+                }
+                case 'console':{
+                    partialUrl = '@Url.Action("Console")';
+                    break;    
+                }
+            }
+            let formData = new FormData(); 
+            formData.append('serverIdString', serverId);
+            fetch(partialUrl, {
+                method: 'POST',
+                body: formData
+            })
+                .then((response) => { return response.text(); })
+                .then((result) => {
+                    $('#server-details-partial-container').html(result);
+                });
+        });
+        
+        
+      
+        
+    }
     let serverConsole = null;
     $(document).ready(function() {
         // on start function
@@ -110,6 +172,8 @@
         let newConsole = new ServerConsole(consoleOptions);
         
         serverConsole = newConsole;
+        
+        bindPartialNavigation();
         
     });
 </script>

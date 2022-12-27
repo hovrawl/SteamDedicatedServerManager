@@ -1,0 +1,30 @@
+@model ServerDetailsViewModel
+@{
+    var server = Model.ServerInstance;
+    var serverId = server?.Id.ToString() ?? "";
+}
+
+<div class="container d-flex flex-column flex-grow-1 ">
+    <ul class="nav nav-tabs" role="tablist" id="server-config-navigation">
+        <li class="nav-item">
+            <button class="nav-link active"  data-bs-toggle="tab" data-bs-target="#config-launch" type="button" role="tab" aria-controls="console" aria-selected="true">Launch</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#config-host" type="button" role="tab" aria-controls="settings" aria-selected="false">Host</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#config-game" type="button" role="tab" aria-controls="settings" aria-selected="false">Game</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="server-navigation-content">
+        <div id="config-launch" class="tab-pane fade show active">
+            Launch
+        </div>
+        <div id="config-host" class="tab-pane fade">
+            Host
+        </div>
+        <div id="config-game" class="tab-pane fade">
+          Game
+        </div>
+    </div>
+</div>

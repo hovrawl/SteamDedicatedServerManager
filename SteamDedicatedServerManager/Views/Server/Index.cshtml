@@ -1,14 +1,58 @@
+@using SteamDedicatedServerManager.Enums
 @model ServerListViewModel
 
 @{
     ViewBag.Title = "Steam Dedicated Server Manager - Server List";
     var servers = Model.ServerInstances;
 }
-<div>
-    <button class="h-create-server-btn">Create V Rising Server</button>
+<div class="container">
+    <div class="h-server-list-menu">
+        @* <button class="h-create-server-btn">Create V Rising Server</button> *@
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-server-modal">
+            Create Server
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="create-server-modal" tabindex="-1" aria-labelledby="model-label" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="model-label">Create Server</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+                <div class="modal-body flex-row">
+                    <div class="h-create-server-form flex-column">
+                        <div class="form-floating">
+                            <select class="form-select" id="server-select" aria-label="Server Selection">
+                                @{
+                                    foreach (GameServer server in Enum.GetValues(typeof(GameServer)))
+                                    {
+                                        <option value="@((int)server)">@server.ToString("G")</option>
+                                    }
+                                }
+                            </select>
+                            <label for="server-select">Server Selection</label>
+                        
+                        </div>
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="server-name" placeholder="Server Name">
+                            <label for="floatingInput">Server Name</label>
+                        </div>
+                    </div>
+                    
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary h-create-server-btn">Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+    @await Html.PartialAsync("_List", Model)
 </div>
 
-@await Html.PartialAsync("_List", Model)
 
 
 <script type="text/javascript">
@@ -27,77 +71,32 @@
                 console.log(event.data);
             }
         }
-        VRisingServerManager.DownloadConsoleEventSource = source;
-                
+        SteamDedicatedServerManager.DownloadConsoleEventSource = source;
+        
+        let serverSelect = $('#server-select');
+        let serverNameText = $('#server-name');
+        let formData = new FormData(); 
+        formData.append('gameServerInt', serverSelect.val());
+        formData.append('serverName', serverNameText.val());
+        
         fetch('@Url.Action("CreateServer")', {
-            method: 'POST'
+            method: 'POST',
+            body: formData,
         }).then((response) => {
             // Disconnect the source on finish
-            if (VRisingServerManager.DownloadConsoleEventSource && VRisingServerManager.DownloadConsoleEventSource.close){
-                VRisingServerManager.DownloadConsoleEventSource.close();
+            if (SteamDedicatedServerManager.DownloadConsoleEventSource && SteamDedicatedServerManager.DownloadConsoleEventSource.close){
+                SteamDedicatedServerManager.DownloadConsoleEventSource.close();
                 console.log('Download Console Closed');
             }    
             console.log(response)
         })
     }
     
-    function startServer(e) {
-        let downloadConsole = $('.h-download-console');
-        let target = $(e.target);
-        let serverId = target.attr('data-id');
-        let fetchData = {
-            serverIdString: serverId
-        };
-        var formData = new FormData(); 
-        formData.append('serverIdString', serverId);
-        fetch('@Url.Action("StartServer")', {
-                method: 'POST',
-                body: formData,
-                //body: JSON.stringify(fetchData),
-                // headers: {
-                //     'Content-Type': 'application/json',
-                // },
-        }).then((response) => {
-            console.log(response)
-            
-            // // After server has started, we can reconnect the event server to the console
-            let source = new EventSource('/console-sse');
-            source.onopen = function (){
-                console.log('Server Console Connected');
-            }
-            source.onerror = function (event){
-                source.close();
-            }
-            source.onmessage = function (event){
-                if (event.data){
-                    console.log(event.data); 
-                    // downloadConsole.append(event.data);
-                    // let consoleElement = downloadConsole.get(0);
-                    // consoleElement.scrollTop = consoleElement.scrollHeight;
-                    
-                }
-            }  
-        })
-    }
-    
-    function serverDetails(e) {
-        let target = $(e.target);
-        let serverId = target.attr('data-id');
-        let url = "@Url.Action("Details", "Server")";
-        window.location = url + '?serverIdString=' + serverId;
-    }
-    
     $(document).ready(function() {
         // on start function
         let createServerBtn = $('.h-create-server-btn');
         createServerBtn.on('click', createServer);
-    
-        let startServerBtn = $('.h-start-server-btn');
-        startServerBtn.on('click', startServer);
-        
-        let serverDetailsBtn = $('.h-server-details-btn');
-        serverDetailsBtn.on('click', serverDetails);
-        
+     
     });
     
 </script>

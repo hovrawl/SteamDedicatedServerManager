@@ -1,4 +1,4 @@
-namespace SteamDedicatedServerManager.Classes.Configuration;
+namespace SteamDedicatedServerManager.Classes.Configuration.VRising;
 
 public class VRisingServerGameConfiguration : IServerGameConfiguration
 {

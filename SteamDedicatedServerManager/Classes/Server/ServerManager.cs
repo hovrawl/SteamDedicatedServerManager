@@ -125,10 +125,24 @@ public sealed class ServerManager
                 returnInstance = serverInstance;
                 break;
             }
+            case GameServer.CoreKeeper:
+            {
+                var serverInstance = new CoreKeeperServerInstance
+                {
+                    Id = Guid.NewGuid(),
+                    ConsoleService = _consoleService,
+                };
+                returnInstance = serverInstance;
+                break;
+            }
         }
 
-        _servers.Add(returnInstance);
-        UpsertServer(returnInstance);
+        if (returnInstance != null)
+        {
+            _servers.Add(returnInstance);
+            UpsertServer(returnInstance);
+        }
+        
         return returnInstance;
     }
 

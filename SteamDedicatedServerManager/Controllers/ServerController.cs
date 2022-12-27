@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SteamDedicatedServerManager.Classes.Configuration;
+using SteamDedicatedServerManager.Classes.Configuration.CoreKeeper;
+using SteamDedicatedServerManager.Classes.Configuration.VRising;
 using SteamDedicatedServerManager.Classes.Server;
 using SteamDedicatedServerManager.Enums;
 using SteamDedicatedServerManager.Models;
@@ -55,24 +57,60 @@ public class ServerController : Controller
         return View(viewModel);
     }
 
-    public JsonResult CreateServer()
+    public JsonResult CreateServer(int gameServerInt, string serverName)
     {
-        var gameServer = GameServer.VRising;
+        if (gameServerInt < 1 || string.IsNullOrEmpty(serverName))
+        {
+            return new JsonResult("incorrect values!")
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+        }
+        
+        var gameServer = (GameServer) gameServerInt;
         // check if the server files already exist
         ServerManager.DownloadServer(gameServer);
 
-        // Will take in game type arguments to create initial server instance
-        var launchConfig = new VRisingServerLaunchConfiguration
+        IServerLaunchConfiguration launchConfig = null;
+        switch (gameServer)
         {
-            ServerName = "Breadland Test",
-            SaveFolderLocation = @".\save-data",
-            SaveName = "Server Test",
-            LogPath = @".\logs\VRisingServer.log",
-        };
+            case GameServer.VRising:
+            {
+                launchConfig = new VRisingServerLaunchConfiguration
+                {
+                    ServerName = serverName,
+                    SaveFolderLocation = @".\save-data",
+                    SaveName = "Server Test",
+                    LogPath = @".\logs\VRisingServer.log",
+                };
+                break;
+            }
+
+            case GameServer.Valheim:
+            {
+                
+                break;
+            }
+
+            case GameServer.CoreKeeper:
+            {
+                launchConfig = new CoreKeeperServerLaunchConfiguration
+                {
+                    ServerName = serverName,
+                    SaveFolderLocation = @".\save-data",
+                    SaveName = "Server Test",
+                    LogPath = @".\logs\CoreKeeper.log",
+                };
+                break;
+            }
+        }
+        // Will take in game type arguments to create initial server instance
+       
         
         var serverInstance = ServerManager.CreateServer(gameServer);
         
         serverInstance.SetLaunchConfiguration(launchConfig);
+        serverInstance.Name = serverName;
         ServerManager.UpsertServer(serverInstance);
         
         return new JsonResult("server created!")
@@ -142,5 +180,35 @@ public class ServerController : Controller
         {
             StatusCode = StatusCodes.Status200OK
         }; 
+    }
+
+    public PartialViewResult Settings(string serverIdString)
+    {
+        Guid.TryParse(serverIdString, out var serverId);
+        var serverInstance = ServerManager.GetServer(serverId);
+        if (serverInstance == null)
+        {
+            return PartialView("Error"); 
+        }
+        var viewModel = new ServerDetailsViewModel
+        {
+            ServerInstance = serverInstance
+        };
+        return PartialView("_Settings", viewModel); 
+    }
+    
+    public PartialViewResult Console(string serverIdString)
+    {
+        Guid.TryParse(serverIdString, out var serverId);
+        var serverInstance = ServerManager.GetServer(serverId);
+        if (serverInstance == null)
+        {
+            return PartialView("Error"); 
+        }
+        var viewModel = new ServerDetailsViewModel
+        {
+            ServerInstance = serverInstance
+        };
+        return PartialView("_Console", viewModel); 
     }
 }

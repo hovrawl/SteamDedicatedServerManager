@@ -1,9 +1,7 @@
-using System.Diagnostics;
 using System.Text;
 using LiteDB;
 using Serilog;
 using SteamCMD.ConPTY;
-using SteamCMD.ConPTY.Interop.Definitions;
 using SteamDedicatedServerManager.Classes.Configuration;
 using SteamDedicatedServerManager.Classes.Configuration.VRising;
 using SteamDedicatedServerManager.Enums;
@@ -11,28 +9,29 @@ using SteamDedicatedServerManager.Services;
 
 namespace SteamDedicatedServerManager.Classes.Server;
 
-public class VRisingServerInstance : IServerInstance
+public class CoreKeeperServerInstance : IServerInstance
 {
     public Guid Id { get; set; }
     
     public string Name { get; set; }
     
-    public GameServer GameType => GameServer.VRising;
-    
-    public ServerStatus ServerStatus { get; private set; }
+    public GameServer GameType => GameServer.CoreKeeper;
 
+    public ServerStatus ServerStatus { get; private set; }
+    
     [BsonIgnore]
     public WindowsPseudoConsole Console { get; set; }
     
-    public IServerLaunchConfiguration LaunchConfiguration { get; private set;  }
-    public IServerHostConfiguration HostConfiguration { get; private set;  }
+    public IServerLaunchConfiguration LaunchConfiguration { get; private set; }
     
-    public IServerGameConfiguration GameConfiguration { get; private set;  }
-
+    public IServerHostConfiguration HostConfiguration { get; private set; }
+    
+    public IServerGameConfiguration GameConfiguration { get; private set; }
+    
     [BsonIgnore]
-    public IConsoleService ConsoleService { get; set; }
+    public IConsoleService ConsoleService { get; set;}
     
-    public void StartServer()
+     public void StartServer()
     {
         if (Console == null)
         {

@@ -3,7 +3,6 @@ using Lib.AspNetCore.ServerSentEvents;
 using Microsoft.AspNetCore.ResponseCompression;
 using SteamDedicatedServerManager.Classes.Server;
 using SteamDedicatedServerManager.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

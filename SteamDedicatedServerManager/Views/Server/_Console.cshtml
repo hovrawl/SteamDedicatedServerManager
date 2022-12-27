@@ -1,0 +1,12 @@
+@model ServerDetailsViewModel
+@{
+    var server = Model.ServerInstance;
+    var serverId = server?.Id.ToString() ?? "";
+}
+<button class="h-connect-console-btn  btn btn-primary" type="button" data-id="@serverId">Connect Console</button>
+
+<div class="container d-flex flex-column flex-grow-1 h-server-console" id="server-console">
+    <div class="h-server-console-container">
+        <span class="h-server-messages"></span>
+    </div>
+</div>

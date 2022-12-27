@@ -26,6 +26,7 @@ public interface IServerInstance
     
     IServerGameConfiguration GameConfiguration { get; }
     
+    [BsonIgnore]
     IConsoleService ConsoleService { get; set; }
 
     #endregion

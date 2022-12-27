@@ -4,19 +4,79 @@
     var servers = Model.ServerInstances;
 }
 
-<div class="h-server-list-container">
+<div class="h-server-list-container d-flex flex-row">
     @{
         foreach (var server in servers)
         {
-            <div class="h-server-cards-container">
-                <div class="h-server-card-wrapper">
-                    <span class="h-server-heading">@server.Name</span>
-                    <span class="h-server-detail">Game - @server.GameType.ToString("G")</span>
-                    <span class="h-server-sub-detail">Status - @server.ServerStatus.ToString("G")</span>
-                    <button class="h-server-details-btn" data-id="@server.Id.ToString()">Details</button>
-                    <button class="h-start-server-btn" data-id="@server.Id.ToString()">Start Server</button>
+            <div class="card">
+                @* <img src="..." class="card-img-top" alt="..."> *@
+                <div class="card-body">
+                    <h5 class="card-title">@server.Name</h5>
+                    <p class="card-text">Game - @server.GameType.ToString("G")</p>
+                    <p class="card-text">Status - @server.ServerStatus.ToString("G")</p>
+                    <button class="btn btn-secondary h-server-details-btn" data-id="@server.Id.ToString()">Details</button>
+                    <button class="btn btn-primary h-server-start-btn" data-id="@server.Id.ToString()">Start Server</button>
                 </div>
             </div>
         }
     }
 </div>
+
+<script type="text/javascript">
+
+    function serverDetails(e) {
+        let target = $(e.target);
+        let serverId = target.attr('data-id');
+        let url = "@Url.Action("Details", "Server")";
+        window.location = url + '?serverIdString=' + serverId;
+    }
+    function startServer(e) {
+            let downloadConsole = $('.h-download-console');
+            let target = $(e.target);
+            let serverId = target.attr('data-id');
+            let fetchData = {
+                serverIdString: serverId
+            };
+            var formData = new FormData(); 
+            formData.append('serverIdString', serverId);
+            fetch('@Url.Action("StartServer")', {
+                    method: 'POST',
+                    body: formData,
+                    //body: JSON.stringify(fetchData),
+                    // headers: {
+                    //     'Content-Type': 'application/json',
+                    // },
+            }).then((response) => {
+                console.log(response)
+                
+                // // After server has started, we can reconnect the event server to the console
+                let source = new EventSource('/console-sse');
+                source.onopen = function (){
+                    console.log('Server Console Connected');
+                }
+                source.onerror = function (event){
+                    source.close();
+                }
+                source.onmessage = function (event){
+                    if (event.data){
+                        console.log(event.data); 
+                        // downloadConsole.append(event.data);
+                        // let consoleElement = downloadConsole.get(0);
+                        // consoleElement.scrollTop = consoleElement.scrollHeight;
+                        
+                    }
+                }  
+            })
+        }
+       
+    $(document).ready(function() {
+            // on start function         
+            let startServerBtn = $('.h-start-server-btn');
+            startServerBtn.on('click', startServer);
+            
+            let serverDetailsBtn = $('.h-server-details-btn');
+            serverDetailsBtn.on('click', serverDetails);
+            
+        });
+        
+</script>

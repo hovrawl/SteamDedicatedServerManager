@@ -1,0 +1,15 @@
+@model ServerDetailsViewModel
+
+
+@{
+    var server = Model.ServerInstance;
+}
+
+@if (server != null)
+{
+    <div class="container">
+        <form asp-controller="Server" asp-action="Settings" method="post"> 
+            
+        </form>
+    </div>
+}

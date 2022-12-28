@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Serilog;
 using SteamDedicatedServerManager.Classes.Configuration;
 using SteamDedicatedServerManager.Classes.Configuration.CoreKeeper;
@@ -182,19 +184,101 @@ public class ServerController : Controller
         }; 
     }
 
-    public PartialViewResult Settings(string serverIdString)
+    public JsonResult UpdateConfig(string serverIdString, int configTypeInt, string configString)
     {
         Guid.TryParse(serverIdString, out var serverId);
         var serverInstance = ServerManager.GetServer(serverId);
         if (serverInstance == null)
         {
-            return PartialView("Error"); 
+            return new JsonResult("Failed to find server")
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            }; 
         }
-        var viewModel = new ServerDetailsViewModel
+
+        var configType = (ConfigType)configTypeInt;
+        switch (serverInstance.GameType)
         {
-            ServerInstance = serverInstance
-        };
-        return PartialView("_Settings", viewModel); 
+            case GameServer.CoreKeeper:
+            {
+                switch (configType)
+                {
+                    case ConfigType.Launch:
+                    {
+                        var launchConfig = new CoreKeeperServerLaunchConfiguration();
+                        
+                        var serverName = Request.Form["serverName"];
+                        launchConfig.ServerName = serverName;
+                        var saveFolder = Request.Form["saveFolder"];
+                        launchConfig.SaveFolderLocation = saveFolder;
+                        var saveName = Request.Form["saveName"];
+                        launchConfig.SaveName = saveName;
+                        long.TryParse(Request.Form["serverPort"], out var serverPort);
+                        launchConfig.GamePort = serverPort;
+                        var serverAddress = Request.Form["serverAddress"];
+                        launchConfig.Address = serverAddress;
+                        
+                        serverInstance.SetLaunchConfiguration(launchConfig);
+                        break;
+                    }
+                    case ConfigType.Host:
+                    {
+                        break;
+                    }
+                    case ConfigType.Game:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+            case GameServer.VRising:
+            {
+                switch (configType)
+                {
+                    case ConfigType.Launch:
+                    {
+                        break;
+                    }
+                    case ConfigType.Host:
+                    {
+                        break;
+                    }
+                    case ConfigType.Game:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+         
+            case GameServer.Valheim:
+            {
+                switch (configType)
+                {
+                    case ConfigType.Launch:
+                    {
+                        break;
+                    }
+                    case ConfigType.Host:
+                    {
+                        break;
+                    }
+                    case ConfigType.Game:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        
+        ServerManager.UpsertServer(serverInstance);
+        
+        return new JsonResult("Updated Config")
+        {
+            StatusCode = StatusCodes.Status200OK
+        }; 
     }
     
     public PartialViewResult Console(string serverIdString)

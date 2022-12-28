@@ -1,15 +1,111 @@
-@model ServerDetailsViewModel
+@using SteamDedicatedServerManager.Enums
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Newtonsoft.Json
+@using SteamDedicatedServerManager.Classes.Configuration.CoreKeeper
+@model ServerConfigViewModel
 
 
 @{
     var server = Model.ServerInstance;
+    var configType = Model.ConfigType;
 }
 
 @if (server != null)
 {
     <div class="container">
-        <form asp-controller="Server" asp-action="Settings" method="post"> 
+        <form asp-controller="Server" asp-action="UpdateConfig" method="post" 
+              asp-route-serverIdString="@server.Id.ToString()" asp-route-configTypeInt="@((int)configType)"
+              class="container d-flex flex-column"> 
+            @switch (server.GameType)
+             {
+                 case GameServer.CoreKeeper:
+                 {
+                     switch (configType)
+                     {
+                         case ConfigType.Launch:
+                         {
+                             var config = server.LaunchConfiguration as
+                             CoreKeeperServerLaunchConfiguration;
+                             
+                             <div class="container d-flex flex-column">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="server-name" name="serverName" placeholder="Server Name" value="@config?.ServerName">
+                                    <label for="server-name">Server Name</label>
+                                </div>
+                                <div class="form-floating">
+                                     <input type="text" class="form-control" id="save-folder" name="saveFolder" placeholder="Save Folder" value="@config?.SaveFolderLocation">
+                                     <label for="save-folder">Save Folder</label>
+                                </div>
+                                <div class="form-floating">
+                                        <input type="text" class="form-control" id="save-name" name="saveName" placeholder="Save Name" value="@config?.SaveName">
+                                        <label for="save-name">Save Name</label>
+                                </div>
+                                 <div class="form-floating">
+                                     <input type="number" class="form-control" id="server-port" name="serverPort" placeholder="Port" value="@config?.GamePort">
+                                     <label for="server-port">Port</label>
+                                 </div>
+                                 <div class="form-floating">
+                                        <input type="text" class="form-control" id="server-address" name="serverAddress" placeholder="Server Address" value="@config?.Address">
+                                        <label for="server-address">Server Address</label>
+                                 </div>
+                             </div>
+                             
+                             break;
+                         }
+                         case ConfigType.Host:
+                         {
+                             break;
+                         }
+                         case ConfigType.Game:
+                         {
+                             break;
+                         }
+                     }
+                     break;
+                 }
+                 case GameServer.VRising:
+                 {
+                     switch (configType)
+                     {
+                         case ConfigType.Launch:
+                         {
+                             break;
+                         }
+                         case ConfigType.Host:
+                         {
+                             break;
+                         }
+                         case ConfigType.Game:
+                         {
+                             break;
+                         }
+                     }
+                     break;
+                 }
+              
+                 case GameServer.Valheim:
+                 {
+                     switch (configType)
+                     {
+                         case ConfigType.Launch:
+                         {
+                             break;
+                         }
+                         case ConfigType.Host:
+                         {
+                             break;
+                         }
+                         case ConfigType.Game:
+                         {
+                             break;
+                         }
+                     }
+                     break;
+                 }
+            }
             
+            <button type="submit" class="btn btn-primary h-create-server-btn">Save</button>
+
         </form>
     </div>
 }

@@ -8,6 +8,7 @@ using SteamDedicatedServerManager.Classes.Configuration;
 using SteamDedicatedServerManager.Classes.Configuration.VRising;
 using SteamDedicatedServerManager.Enums;
 using SteamDedicatedServerManager.Services;
+using ILogger = Serilog.ILogger;
 
 namespace SteamDedicatedServerManager.Classes.Server;
 
@@ -22,8 +23,8 @@ public class VRisingServerInstance : IServerInstance
     public ServerStatus ServerStatus { get; private set; }
 
     [BsonIgnore]
-    public WindowsPseudoConsole Console { get; set; }
-    
+    public Process ServerProcess { get; private set; }
+
     public IServerLaunchConfiguration LaunchConfiguration { get; private set;  }
     public IServerHostConfiguration HostConfiguration { get; private set;  }
     
@@ -32,26 +33,46 @@ public class VRisingServerInstance : IServerInstance
     [BsonIgnore]
     public IConsoleService ConsoleService { get; set; }
     
+    [BsonIgnore] 
+    public ILogger Logger { get; private set; }
+    
+    private string ServerExeName = @"VRisingServer.exe";
+    private string ServerPathInstallation = $@"";
+    
+    public void Init()
+    {
+        ServerExeName = @"VRisingServer.exe";
+        ServerPathInstallation = $@".\Servers\{GameType:G}";
+        var logPath = @".\Logs";
+        if (!string.IsNullOrEmpty(LaunchConfiguration?.LogPath))
+        {
+            logPath = LaunchConfiguration.LogPath;
+        }
+        Logger = new LoggerConfiguration().WriteTo.File(logPath).CreateLogger();
+        
+        CreateConsole();
+    }
+    
     public void StartServer()
     {
-        if (Console == null)
+        if (ServerProcess == null)
         {
             CreateConsole();
         }
 
-        Console.Start();
+        ServerProcess.Start();
     }
     
     public void StopServer()
     {
-        if (Console == null)
+        if (ServerProcess == null)
         {
             return;
         }
 
-        Console.Dispose();
-        
-        Console = null;
+        ServerProcess.Kill();
+        ServerProcess.Dispose();
+        ServerProcess = null;
     }
 
 
@@ -61,29 +82,56 @@ public class VRisingServerInstance : IServerInstance
 
         LaunchConfiguration = vRisingLaunchConfig;
 
-        if (Console == null)
+        UpdateLaunchArguments();
+    }
+
+    private void UpdateLaunchArguments()
+    {
+        if (ServerProcess == null)
         {
             CreateConsole();
         }
+        else
+        {
+            var newArguments = GetLaunchArguments();
+            ServerProcess.StartInfo.Arguments = newArguments;
+        }
     }
+    
+    private string GetLaunchArguments()
+    {
+        if (LaunchConfiguration is not VRisingServerLaunchConfiguration launchConfig) return "";
+        
+        var launchArguments = new List<string>();
+        
+        launchArguments.Add($"-persistentDataPath {launchConfig.SaveFolderLocation}");
+        launchArguments.Add($"-serverName {launchConfig.ServerName}");
+        launchArguments.Add($"-saveName {launchConfig.SaveName}");
+        launchArguments.Add($"-logFile {launchConfig.LogPath}");
 
+        return string.Join(" ", launchArguments);
+    }
+    
     private void CreateConsole()
     {
-        var serverArguments = new StringBuilder();
-        serverArguments.Append($"-persistentDataPath {LaunchConfiguration.SaveFolderLocation}");
-        serverArguments.Append($"-serverName {LaunchConfiguration.ServerName}");
-        serverArguments.Append($"-saveName {LaunchConfiguration.SaveName}");
-        serverArguments.Append($"-logFile {LaunchConfiguration.LogPath}");
-        
-        var ServerExeName = @"VRisingServer.exe";
-        var ServerPathInstallation = $@".\Servers\{GameType:G}";
+        var launchArguments = GetLaunchArguments();
         
         // Create server console process
-        Console = new WindowsPseudoConsole
+        ServerProcess = new Process()
         {
-            FileName = ServerExeName,
-            WorkingDirectory = ServerPathInstallation,
-            Arguments = string.Join(" ", serverArguments)
+            StartInfo =
+            {
+                WorkingDirectory = ServerPathInstallation,
+                FileName = Path.Combine(ServerPathInstallation, ServerExeName),
+                Arguments = launchArguments.TrimEnd(),
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = false,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            },
+            EnableRaisingEvents = true
         };
 
         ConnectConsole();
@@ -91,15 +139,15 @@ public class VRisingServerInstance : IServerInstance
 
     public void ConnectConsole()
     {
-        if (Console == null)
+        if (ServerProcess == null)
         {
             CreateConsole();
         }
         
         // Attach message handlers
-        Console.TitleReceived += ServerTitleReceived;
-        Console.OutputDataReceived += ServerOutputDataReceived;
-        Console.Exited += ServerExited;
+        ServerProcess.ErrorDataReceived += ServerErrorReceived;
+        ServerProcess.OutputDataReceived += ServerMessageReceived;
+        ServerProcess.Exited += ServerExited;
     }
     
     public void SetHostConfiguration(IServerHostConfiguration hostConfiguration)
@@ -118,25 +166,28 @@ public class VRisingServerInstance : IServerInstance
     
     public void ServerTitleReceived(object? sender, string data)
     {
-        Log.Information(data);
+        Logger.Information(data);
         ConsoleService?.SendMessage(data, false);
         ServerStatus = ServerStatus.Running;
     }
-        
-    public void ServerOutputDataReceived(object? sender, string data)
+    
+    public void ServerErrorReceived(object sender, DataReceivedEventArgs e)
     {
-        Log.Information(data);
-        
-        Task.Delay(550).Wait();
-
-        ConsoleService?.SendMessage(data, false);
+        Logger.Error(e.Data);
+        ConsoleService?.SendMessage(e.Data, true);
     }
     
-    public void ServerExited(object? sender, int exitCode)
+    public void ServerMessageReceived(object sender, DataReceivedEventArgs e)
     {
-        Log.Information("Server Closed");
+        Logger.Information(e.Data);
+        ConsoleService?.SendMessage(e.Data, false);
+        ServerStatus = ServerStatus.Running;
+    }
+    
+    public void ServerExited(object sender, EventArgs e)
+    {
+        Logger.Error("Server Closed");
         ConsoleService?.SendMessage("Server Closed");
         ServerStatus = ServerStatus.Stopped;
-
     }
 }

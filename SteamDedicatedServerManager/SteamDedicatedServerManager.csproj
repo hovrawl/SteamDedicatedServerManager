@@ -10,6 +10,7 @@
     <ItemGroup>
       <PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="8.2.0" />
       <PackageReference Include="LiteDB" Version="5.0.14" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
       <PackageReference Include="RconSharp" Version="2.0.1" />
       <PackageReference Include="Serilog" Version="2.12.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
@@ -89,6 +90,11 @@
       <None Remove="save-data-serverName\**" />
       <None Remove="servers\**" />
       <None Remove="SteamCMD\**" />
+      <None Include="Web.config">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

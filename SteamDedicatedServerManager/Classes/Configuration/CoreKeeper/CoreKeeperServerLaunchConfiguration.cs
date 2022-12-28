@@ -19,4 +19,6 @@ public class CoreKeeperServerLaunchConfiguration : IServerLaunchConfiguration
     public long GamePort { get; set; }
     
     public long QueryPort { get; set; }
+    
+    public string GameId { get; set; }
 }

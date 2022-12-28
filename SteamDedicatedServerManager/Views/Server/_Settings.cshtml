@@ -1,7 +1,13 @@
+@using SteamDedicatedServerManager.Enums
 @model ServerDetailsViewModel
 @{
     var server = Model.ServerInstance;
     var serverId = server?.Id.ToString() ?? "";
+    var configModel = new ServerConfigViewModel()
+    {
+        ServerInstance = server,
+        ConfigType = ConfigType.Launch
+    };
 }
 
 <div class="container d-flex flex-column flex-grow-1 ">
@@ -18,13 +24,22 @@
     </ul>
     <div class="tab-content" id="server-navigation-content">
         <div id="config-launch" class="tab-pane fade show active">
-            Launch
+            @{
+                configModel.ConfigType = ConfigType.Launch;
+            }
+            @await Html.PartialAsync("_ConfigFields", configModel)
         </div>
         <div id="config-host" class="tab-pane fade">
-            Host
+            @{
+                configModel.ConfigType = ConfigType.Host;
+            }
+            @* @await Html.PartialAsync("_ConfigFields", configModel) *@
         </div>
         <div id="config-game" class="tab-pane fade">
-          Game
+          @{
+              configModel.ConfigType = ConfigType.Game;
+          }
+          @* @await Html.PartialAsync("_ConfigFields", configModel) *@
         </div>
     </div>
 </div>

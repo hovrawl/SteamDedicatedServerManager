@@ -1,8 +1,11 @@
+using System.Diagnostics;
 using LiteDB;
+using Serilog;
 using SteamCMD.ConPTY;
 using SteamDedicatedServerManager.Classes.Configuration;
 using SteamDedicatedServerManager.Enums;
 using SteamDedicatedServerManager.Services;
+using ILogger = Serilog.ILogger;
 
 namespace SteamDedicatedServerManager.Classes.Server;
 
@@ -18,7 +21,7 @@ public interface IServerInstance
     ServerStatus ServerStatus { get; }
     
     [BsonIgnore]
-    WindowsPseudoConsole Console { get; set; }
+    Process ServerProcess { get; }
 
     IServerLaunchConfiguration LaunchConfiguration { get; }
     
@@ -29,9 +32,15 @@ public interface IServerInstance
     [BsonIgnore]
     IConsoleService ConsoleService { get; set; }
 
+    [BsonIgnore] 
+    ILogger Logger { get; }
+
     #endregion
     
     #region Methods
+
+    void Init();
+    
     void StartServer();
     
     void StopServer();
@@ -46,11 +55,12 @@ public interface IServerInstance
     #endregion
     
     #region Events
-    void ServerTitleReceived(object? sender, string data);
 
-    void ServerOutputDataReceived(object? sender, string data);
+    void ServerErrorReceived(object sender, DataReceivedEventArgs e);
 
-    void ServerExited(object? sender, int exitCode);
+    void ServerMessageReceived(object sender, DataReceivedEventArgs e);
+
+    void ServerExited(object sender, EventArgs e);
     
     #endregion
 }

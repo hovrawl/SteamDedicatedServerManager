@@ -51,7 +51,10 @@ public sealed class ServerManager
     {
         _liteDbConnectionString = Path.Combine(_serverDirectory, _databaseName);
         LoadServerList();
-        
+        foreach (var server in _servers)
+        {
+            server.Init();
+        }
     }
     
     public static void SetConsoleMessages(IConsoleService consoleService)
@@ -139,6 +142,7 @@ public sealed class ServerManager
 
         if (returnInstance != null)
         {
+            returnInstance.Init();
             _servers.Add(returnInstance);
             UpsertServer(returnInstance);
         }
@@ -169,6 +173,7 @@ public sealed class ServerManager
             var col = db.GetCollection<IServerInstance>(_dbName);
 
             var servers = col.FindAll();
+            
             _servers = servers.ToList();
         }
     }

@@ -18,17 +18,6 @@
         <p>@server?.GameType.ToString("G")</p>
         <p>@server?.ServerStatus.ToString("G")</p>
     </div>
-
-    @* <div class="h-server-navigation container"> *@
-    @*     <div class="h-collapse-btns"> *@
-    @*         <button class="btn btn-primary" type="button" data-view="console"> *@
-    @*             Console *@
-    @*         </button> *@
-    @*         <button class="btn btn-primary" type="button" data-view="settings"> *@
-    @*             Config *@
-    @*         </button> *@
-    @*     </div> *@
-    @* </div> *@
     <ul class="nav nav-pills" role="tablist" id="server-navigation">
         <li class="nav-item">
         <button class="nav-link active" id="console-tab" data-bs-toggle="tab" data-bs-target="#console" type="button" role="tab" aria-controls="console" aria-selected="true">Console</button>
@@ -45,9 +34,6 @@
             @await Html.PartialAsync("_Settings", Model)
         </div>
       
-    </div>
-   
-    <div class="container d-flex flex-column flex-grow-1 overflow-auto" id="server-details-partial-container">
     </div>
 </div>
 
@@ -116,40 +102,37 @@
         })
     }
     
-    function bindPartialNavigation(){
-        let serverId = '@serverId';
-        let serverNavigation = $('.h-server-navigation');
-        let navigationBtns = serverNavigation.find('.btn');
-        navigationBtns.on('click', function(e){
-            let element = $(e.currentTarget);
-            let viewName = element.attr('data-view');
-            let partialUrl = '@Url.Action("Settings")';
-            switch (viewName){
-                case 'settings':{
-                    partialUrl = '@Url.Action("Settings")';
-                    break;    
-                }
-                case 'console':{
-                    partialUrl = '@Url.Action("Console")';
-                    break;    
-                }
-            }
-            let formData = new FormData(); 
-            formData.append('serverIdString', serverId);
-            fetch(partialUrl, {
-                method: 'POST',
-                body: formData
-            })
-                .then((response) => { return response.text(); })
-                .then((result) => {
-                    $('#server-details-partial-container').html(result);
-                });
-        });
-        
-        
-      
-        
-    }
+    // function bindPartialNavigation(){
+    //     let serverId = '@serverId';
+    //     let serverNavigation = $('.h-server-navigation');
+    //     let navigationBtns = serverNavigation.find('.btn');
+    //     navigationBtns.on('click', function(e){
+    //         let element = $(e.currentTarget);
+    //         let viewName = element.attr('data-view');
+    //         let partialUrl = '';
+    //         switch (viewName){
+    //             case 'settings':{
+    //                 partialUrl = '';
+    //                 break;    
+    //             }
+    //             case 'console':{
+    //                 partialUrl = ';
+    //                 break;    
+    //             }
+    //         }
+    //         let formData = new FormData(); 
+    //         formData.append('serverIdString', serverId);
+    //         fetch(partialUrl, {
+    //             method: 'POST',
+    //             body: formData
+    //         })
+    //             .then((response) => { return response.text(); })
+    //             .then((result) => {
+    //                 $('#server-details-partial-container').html(result);
+    //             });
+    //     })
+    // }
+    
     let serverConsole = null;
     $(document).ready(function() {
         // on start function
@@ -173,7 +156,7 @@
         
         serverConsole = newConsole;
         
-        bindPartialNavigation();
+        //bindPartialNavigation();
         
     });
 </script>

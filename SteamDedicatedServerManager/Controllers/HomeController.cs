@@ -44,16 +44,6 @@ public class HomeController : Controller
         };
         return View(viewModel);
     }
-
-    public IActionResult Console()
-    {
-        return View();
-    }
-    
-    public IActionResult Configuration()
-    {
-        return View();
-    }
     
     public IActionResult Privacy()
     {

@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Newtonsoft.Json
 @using SteamDedicatedServerManager.Classes.Configuration.CoreKeeper
+@using SteamDedicatedServerManager.Classes.Configuration.VRising
 @model ServerConfigViewModel
 
 
@@ -69,6 +70,32 @@
                      {
                          case ConfigType.Launch:
                          {
+                             var config = server.LaunchConfiguration as
+                                 VRisingServerLaunchConfiguration;
+                             
+                             <div class="container d-flex flex-column">
+                                 <div class="form-floating">
+                                     <input type="text" class="form-control" id="server-name" name="serverName" placeholder="Server Name" value="@config?.ServerName">
+                                     <label for="server-name">Server Name</label>
+                                 </div>
+                                  
+                                 <div class="form-floating">
+                                     <input type="text" class="form-control" id="save-folder" name="saveFolder" placeholder="Save Folder" value="@config?.SaveFolderLocation">
+                                     <label for="save-folder">Save Folder</label>
+                                 </div>
+                                 <div class="form-floating">
+                                     <input type="text" class="form-control" id="save-name" name="saveName" placeholder="Save Name" value="@config?.SaveName">
+                                     <label for="save-name">Save Name</label>
+                                 </div>
+                                 <div class="form-floating">
+                                     <input type="number" class="form-control" id="server-port" name="serverPort" placeholder="Port" value="@config?.GamePort">
+                                     <label for="server-port">Port</label>
+                                 </div>
+                                 <div class="form-floating">
+                                     <input type="text" class="form-control" id="server-address" name="serverAddress" placeholder="Server Address" value="@config?.Address">
+                                     <label for="server-address">Server Address</label>
+                                 </div>
+                             </div>
                              break;
                          }
                          case ConfigType.Host:

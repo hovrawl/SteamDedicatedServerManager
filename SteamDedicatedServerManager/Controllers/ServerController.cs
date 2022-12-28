@@ -238,6 +238,20 @@ public class ServerController : Controller
                 {
                     case ConfigType.Launch:
                     {
+                        var launchConfig = new VRisingServerLaunchConfiguration();
+                        
+                        var serverName = Request.Form["serverName"];
+                        launchConfig.ServerName = serverName;
+                        var saveFolder = Request.Form["saveFolder"];
+                        launchConfig.SaveFolderLocation = saveFolder;
+                        var saveName = Request.Form["saveName"];
+                        launchConfig.SaveName = saveName;
+                        long.TryParse(Request.Form["serverPort"], out var serverPort);
+                        launchConfig.GamePort = serverPort;
+                        var serverAddress = Request.Form["serverAddress"];
+                        launchConfig.Address = serverAddress;
+                        
+                        serverInstance.SetLaunchConfiguration(launchConfig);
                         break;
                     }
                     case ConfigType.Host:

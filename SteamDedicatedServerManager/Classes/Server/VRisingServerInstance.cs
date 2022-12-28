@@ -107,8 +107,18 @@ public class VRisingServerInstance : IServerInstance
         launchArguments.Add($"-persistentDataPath {launchConfig.SaveFolderLocation}");
         launchArguments.Add($"-serverName {launchConfig.ServerName}");
         launchArguments.Add($"-saveName {launchConfig.SaveName}");
-        launchArguments.Add($"-logFile {launchConfig.LogPath}");
+        
+        var logPath = launchConfig.LogPath ?? $"{launchConfig.SaveFolderLocation}.txt";
+        if (!logPath.EndsWith(".txt"))
+        {
+            logPath += ".txt";
+        }
 
+        logPath = Path.Combine(launchConfig.SaveFolderLocation, logPath);
+        // Ensure log directory is available
+    
+        launchArguments.Add($@"-logfile {logPath}");
+        
         return string.Join(" ", launchArguments);
     }
     
@@ -155,6 +165,7 @@ public class VRisingServerInstance : IServerInstance
         if (hostConfiguration is not VRisingServerHostConfiguration vRisingServerHostConfiguration) return;
 
         HostConfiguration = vRisingServerHostConfiguration;
+        // Save Host Config to JSON file
     }
     
     public void SetGameConfiguration(IServerGameConfiguration gameConfiguration)
@@ -162,6 +173,8 @@ public class VRisingServerInstance : IServerInstance
         if (gameConfiguration is not VRisingServerGameConfiguration vRisingGameConfig) return;
 
         GameConfiguration = vRisingGameConfig;
+        // Save Game Config to JSON file
+
     }
     
     public void ServerTitleReceived(object? sender, string data)

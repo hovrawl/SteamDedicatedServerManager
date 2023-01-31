@@ -8,7 +8,7 @@ Steam Dedicated Server Web Application to create and manage your game servers
   
  ## Supported Game Servers
  Game Server | Instance Support | Console Support
-| :--- | ---: | :---:
+| :--- | :---: | :---:
 Core Keeper  | ✅ | ❌
 Valheim  | ❌ | ❌
 V Rising  | ✅ | ✅
